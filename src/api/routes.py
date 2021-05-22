@@ -140,7 +140,7 @@ def forgot_pass():
     else:
 # paso3 si mail y respuesta calzan enviar mail con el password
         sg = sendgrid.SendGridAPIClient(api_key=os.environ.get('SENDGRID_API_KEY'))
-        from_email = Email("cris-nando01@hotmail.com")
+        from_email = Email("Fitmind@mail.com")
         to_email = To(email)
         subject = "Recuperacion de contraseña"
         content = Content("text/html","<html><head></head><body><h3>Hola!</h3><p>Has olvidado tu contraseña!!</p><spam>Nesesitas ejercitar tu mente, regresa ahora</spam><hr/><spam>tu contrasena es: </spam>"+user.password+"</body></html>")

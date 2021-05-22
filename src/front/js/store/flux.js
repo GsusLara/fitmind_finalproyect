@@ -27,7 +27,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					redirect: "follow"
 				};
 
-				fetch("https://fitmind-back.herokuapp.com/api/usuario", requestOptions)
+				fetch(process.env.BACKEND_URL + "/api/usuario", requestOptions)
 					.then(response => {
 						if (response.status >= 200 && response.status < 300) {
 							return response.json();
@@ -46,7 +46,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					redirect: "follow"
 				};
 
-				fetch("https://fitmind-back.herokuapp.com/api/pregunta", requestOptions)
+				fetch(process.env.BACKEND_URL + "/api/pregunta", requestOptions)
 					.then(response => {
 						if (response.status >= 200 && response.status < 300) return response.json();
 					})
@@ -70,7 +70,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					redirect: "follow"
 				};
 
-				fetch("https://fitmind-back.herokuapp.com/api/login", requestOptions)
+				fetch(process.env.BACKEND_URL + "/api/login", requestOptions)
 					.then(response => {
 						if (response.status >= 200 && response.status < 300) {
 							return response.json();
@@ -108,7 +108,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					redirect: "follow"
 				};
 
-				fetch("https://fitmind-back.herokuapp.com/api/usuario", requestOptions)
+				fetch(process.env.BACKEND_URL + "/api/usuario", requestOptions)
 					.then(response => {
 						if (response.status >= 200 && response.status < 300) {
 							setStore({ respuestaRegistro: 1 });
@@ -136,7 +136,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					redirect: "follow"
 				};
 
-				fetch("https://fitmind-back.herokuapp.com/api/forgot_pass", requestOptions)
+				fetch(process.env.BACKEND_URL + "/api/forgot_pass", requestOptions)
 					.then(response => {
 						if (response.status >= 200 && response.status < 300) {
 							alert("Contraseña enviada al correo electrónico");
@@ -166,7 +166,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					redirect: "follow"
 				};
 
-				fetch("https://fitmind-back.herokuapp.com/api/usuario", requestOptions)
+				fetch(process.env.BACKEND_URL + "/api/usuario", requestOptions)
 					.then(response => {
 						if (response.status >= 200 && response.status < 300) {
 							return response.json();
@@ -188,7 +188,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					redirect: "follow"
 				};
 
-				fetch("https://fitmind-back.herokuapp.com/api/usuario", requestOptions)
+				fetch(process.env.BACKEND_URL + "/api/usuario", requestOptions)
 					.then(response => {
 						if (response.status >= 200 && response.status < 300) {
 							return response.json();
