@@ -139,9 +139,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				fetch(process.env.BACKEND_URL + "/api/forgot_pass", requestOptions)
 					.then(response => {
 						if (response.status >= 200 && response.status < 300) {
+							alert("Contraseña enviada al correo electrónico");
 							return response.json();
 						} else {
-							alert("error" + response.status);
+							alert("el usuario no está registrado");
 						}
 					})
 					.then(result => result)

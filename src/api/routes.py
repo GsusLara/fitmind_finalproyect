@@ -4,7 +4,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 import os
 import sendgrid
 from sendgrid.helpers.mail import *
-from flask import Flask, request, jsonify, url_for, Blueprint,current_app
+from flask import Flask, request, jsonify, url_for, Blueprint, current_app
 from api.models import db, User, Pregunta
 from api.utils import generate_sitemap, APIException
 from flask_mail import Message
@@ -13,12 +13,12 @@ from flask_jwt_extended import create_access_token, JWTManager, jwt_required, ge
 api = Blueprint('api', __name__)
 
 
-#registrar usuario
+# registrar usuario
 @api.route('/usuario', methods=['POST'])
 def create_User():
     data = request.get_json()
     if not data:
-        return jsonify({"msg":"error"}),400 
+        return jsonify({"msg": "error"}), 400
 
     for i in data:
 
@@ -28,7 +28,8 @@ def create_User():
         db.session.commit()
     return jsonify({"user": "ok"}), 200
 
-#login de usuario
+# login de usuario
+
 
 @api.route("/login", methods=["POST"])
 def login():
@@ -55,7 +56,7 @@ def protected():
     return jsonify({"id": user.id, "email": user.email})
 
 
-#get info de usuario
+# get info de usuario
 
 @api.route('/usuario', methods=['GET'])
 @jwt_required()
@@ -65,31 +66,36 @@ def consulta_User():
     request = user.serialize()
     return jsonify(request), 200
 
-#carga de preguntas a bd
+# carga de preguntas a bd
+
 
 @api.route('/pregunta', methods=['POST'])
 def addPregunta():
     data = request.get_json()
     for i in data:
-        preg = Pregunta(test_log=i["test_log"],frase=i["frase"],option_correcta=i["option_correcta"],option_mal1=i["option_mal1"],option_mal2=i["option_mal2"],option_mal3=i["option_mal3"])
+        preg = Pregunta(test_log=i["test_log"], frase=i["frase"], option_correcta=i["option_correcta"],
+                        option_mal1=i["option_mal1"], option_mal2=i["option_mal2"], option_mal3=i["option_mal3"])
         db.session.add(preg)
         db.session.commit()
 
     return jsonify({"data": "ok"}), 200
 
-#get de preguntas 
+# get de preguntas
+
 
 @api.route('/pregunta', methods=['GET'])
 def infoPregunta():
     preg = Pregunta.query.all()
-    request = list(map(lambda preg:preg.serialize(),preg)) 
+    request = list(map(lambda preg: preg.serialize(), preg))
     return jsonify(request), 200
 
-#update nota 
+# update nota
+
+
 @api.route('/usuario', methods=['PUT'])
 @jwt_required()
 def change_user_data():
-# buscamos el registro  a actualizar
+    # buscamos el registro  a actualizar
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
 # obtenemos los datos parametros de entrada
@@ -105,44 +111,42 @@ def change_user_data():
 
 # Eliminar usuario
 
+
 @api.route('/usuario', methods=["DELETE"])
 @jwt_required()
 def delete_usuario():
     current_user_id = get_jwt_identity()
     user = User.query.filter_by(id=current_user_id).first()
     if user is None:
-        raise APIException("usuario no existe!",status_code=404)
+        raise APIException("usuario no existe!", status_code=404)
     db.session.delete(user)
     db.session.commit()
-    return jsonify({"Usuario eliminado":"ok"}),200
+    return jsonify({"Usuario eliminado": "ok"}), 200
 
-#RECUPERAR CONTRASEÑA
+# RECUPERAR CONTRASEÑA
+
+
 @api.route("/forgot_pass", methods=["POST"])
 def forgot_pass():
-    #paso1 recibir email y respuesta secreta
-    #paso2 corroborar si la respuesta secreta es correcta y el mail (CONSULTAR A BASE DE DATOS)
-    #paso3 si mail y respuesta calzan enviar mail con
-    email=request.json.get("email", None)
+# paso1 recibir una entrada de email valido 
+    email = request.json.get("email", None)
+    if email is None:
+        return jsonify({"message": "Bad user or password"}), 400
+# paso2 corroborar  el mail (CONSULTAR A BASE DE DATOS)
 
-    print(email)
-    if not email:
-        return jsonify({"message": "Email no registrado"}), 400
-
-    # email_registrado = User.query.filter_by(email=email).first()
-    # if not email_registrado:
-    #     return jsonify ({"msg":"Si el correo es válido se ha enviado la información de recuperación"}), 400
-
-    # print(email_registrado.password)
-    sg = sendgrid.SendGridAPIClient(api_key=os.environ.get('SENDGRID_API_KEY'))
-    from_email = Email("cris-nando01@hotmail.com")
-    to_email = To(email)
-    subject = "Sending with SendGrid is Fun"
-    content = Content("text/plain", "and easy to do anywhere, even with Python")
-    mail = Mail(from_email, to_email, subject, content)
-    try:
-        response = sg.client.mail.send.post(request_body=mail.get())
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
-    except:
-        return jsonify({"msg": "failed"}), 400
+    user = User.query.filter_by(email=email).first()
+    if user is None:
+        return jsonify({"message": "Bad user or password"}), 401
+    else:
+# paso3 si mail y respuesta calzan enviar mail con el password
+        sg = sendgrid.SendGridAPIClient(api_key=os.environ.get('SENDGRID_API_KEY'))
+        from_email = Email("cris-nando01@hotmail.com")
+        to_email = To(email)
+        subject = "Recuperacion de contraseña"
+        content = Content("text/html","<html><head></head><body><h3>Hola!</h3><p>Has olvidado tu contraseña!!</p><spam>Nesesitas ejercitar tu mente, regresa ahora</spam><hr/><spam>tu contrasena es: </spam>"+user.password+"</body></html>")
+        mail = Mail(from_email, to_email, subject, content)
+        try:
+            response = sg.client.mail.send.post(request_body=mail.get())
+            return jsonify({"msg": "Password enviado"}), 200
+        except:
+            return jsonify({"msg": "failed"}), 400
