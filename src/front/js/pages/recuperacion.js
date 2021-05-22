@@ -27,7 +27,7 @@ export const Recuperacion = () => {
 	}, []);
 	return (
 		<div className="container-fluid text-center p-3 Principal mt-5 mb-5">
-			<div className="container mt-5 mb-5">
+			<div className="mt-5 mb-5">
 				<h5 className="mt-5">
 					<strong>Recupera tu contraseña</strong>
 				</h5>
