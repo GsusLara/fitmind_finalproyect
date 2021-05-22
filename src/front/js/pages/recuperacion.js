@@ -26,12 +26,12 @@ export const Recuperacion = () => {
 		actions.changeNav("principal");
 	}, []);
 	return (
-		<div className="container-fluid text-center p-3 Principal mt-5 mb-5">
-			<div className="mt-5 mb-5">
-				<h5 className="mt-5">
+		<div className="container-fluid text-center p-3 Principal">
+			<div className="passrec">
+				<h5 className="mt-5 ">
 					<strong>Recupera tu contraseña</strong>
 				</h5>
-				<div className="row text-center mt-2">
+				<div className="row text-center mt-2 ">
 					<div className="col-4" />
 					<div className="col-4">
 						<Form className="mt-3" onSubmit={handleSubmit}>
