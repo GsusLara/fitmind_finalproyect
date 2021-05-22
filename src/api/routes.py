@@ -139,7 +139,7 @@ def forgot_pass():
         return jsonify({"message": "Bad user or password"}), 401
     else:
 # paso3 si mail y respuesta calzan enviar mail con el password
-        sg = sendgrid.SendGridAPIClient(api_key=os.environ.get('SENDGRID_API_KEY'))
+        sg = sendgrid.SendGridAPIClient(api_key=os.environ.get('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'))
         from_email = Email("cris-nando01@hotmail.com")
         to_email = To(email)
         subject = "Recuperacion de contraseña"
